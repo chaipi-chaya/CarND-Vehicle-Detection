@@ -58,7 +58,7 @@ Here is an example using the `YCrCb` color space and HOG parameters of `orientat
 
 The code for this step is contained in the `In [3]` of the IPython notebook name `HOG_classify.ipynb`. 
 
-I tried various combinations of parameters and I found out that RGB, HSV, LUV wasn't so good but HLS, YUV, YCrCb was okey, so I invastigated them with various orient and pix_per_cell. Eventually I choose YCrCb bacause it worked a little bit batter than other.
+I tried various combinations of parameters and I found out that RGB, HSV, LUV wasn't so good but HLS, YUV, YCrCb was well, so I invastigated them with various orient and pix_per_cell. Eventually I choose YCrCb bacause it worked a little bit batter than other.
 
 For pix_per_cell, I tried to use various values, lower value seem to took a lot of time to extracted feature and fitted to a model but larger value wasn't acculate, so I use 8 which a middle number.
 
