@@ -17,8 +17,8 @@ The goals / steps of this project are the following:
 [//]: # (Image References)
 [image1]: ./examples/car_not_car.png
 [image2]: ./examples/HOG_example.jpg
-[image3]: ./examples/sliding_windows.jpg
-[image4]: ./examples/sliding_window.jpg
+[image3]: ./examples/sliding_windows.png
+[image4]: ./examples/sliding_window.png
 [image5]: ./examples/bboxes_and_heat.png
 [image6]: ./examples/labels_map.png
 [image7]: ./examples/output_bboxes.png
@@ -38,7 +38,7 @@ You're reading it!
 
 #### 1. Explain how (and identify where in your code) you extracted HOG features from the training images.
 
-The code for this step is contained in the first code cell of the IPython notebook (or in lines # through # of the file called `some_file.py`).  
+The code for this step is contained in the `In [2]` of the IPython notebook name `HOG_classify.ipynb`. 
 
 I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
 
@@ -46,30 +46,41 @@ I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an 
 
 I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`).  I grabbed random images from each of the two classes and displayed them to get a feel for what the `skimage.hog()` output looks like.
 
-Here is an example using the `YCrCb` color space and HOG parameters of `orientations=8`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
+Here is an example using the `YCrCb` color space and HOG parameters of `orientations=9`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
 
 
 ![alt text][image2]
 
 #### 2. Explain how you settled on your final choice of HOG parameters.
 
-I tried various combinations of parameters and...
+The code for this step is contained in the `In [3]` of the IPython notebook name `HOG_classify.ipynb`. 
+
+I tried various combinations of parameters and I found out that RGB, HSV, LUV wasn't so good but HLS, YUV, YCrCb was okey, so I invastigated them with various orient and pix_per_cell. Eventually I choose YCrCb bacause it worked a little bit batter than other.
+
+For pix_per_cell, I tried to use various values, lower value seem to took a lot of time to extracted feature and fitted to a model but larger value wasn't acculate, so I use 8 which a middle number.
 
 #### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
-I trained a linear SVM using...
+The code for this step is contained in the `In [4]` of the IPython notebook name `HOG_classify.ipynb`. 
+
+I trained a linear SVM using sklearn library. I extracted feature using function in the classroom with YCrcb color space, 9 orient, 8 pixel per cell, 2 cell per block, all hog channels and so no and also spatially binned color and histograms of color in the feature vector. I tried various C values but the result wasn't so different. so I used the defualt value.
 
 ### Sliding Window Search
 
 #### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
-I decided to search random window positions at random scales all over the image and came up with this (ok just kidding I didn't actually ;):
+The code for this step is contained in the `In [2]` of the IPython notebook name `Pipeline.ipynb`. 
+
+I decided to use 4 scales of window on lower half of image (start from 400). I used small scale to detect far away car and emphasis part of cars, for bigger scales I used it for detect close cars. At first I use search window function from classroom but it took a lot of time to train, so I decided to use hog sub-sampling instead which a lot faster.
+The scales are 0.75, 1.25, 1.75, 2.75 and took 2 cell per step, each scale overlap itself depented on its size.
 
 ![alt text][image3]
 
 #### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
-Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
+The code for this step is contained in the `In [2]` of the IPython notebook name `Pipeline.ipynb`. 
+
+Ultimately I searched on four scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
 
 ![alt text][image4]
 ---
@@ -77,7 +88,7 @@ Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spat
 ### Video Implementation
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](./project_video_output.mp4)
 
 
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
@@ -104,5 +115,11 @@ Here's an example result showing the heatmap from a series of frames of video, t
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+For me the issues is parameter turning, it have various of parameter and values. The weakness of this pipeline, I think, is a model because the more data we use for train, svm will take more time to run, so if we want to prevent overfitting we need a lot of data and at some point svm won't be efficient anymore and nurual netwrok might be batter.
+
+
+
+
+
+
 
